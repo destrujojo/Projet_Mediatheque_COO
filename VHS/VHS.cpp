@@ -5,30 +5,42 @@
 #include "VHS.h"
 #include <iostream>
 
-VHS::VHS(std::string Auteur, std::string MaisonProduction, float Duree){
-    this->Auteur = Auteur;
-    this->MaisonProduction = MaisonProduction;
-    this->Duree = Duree;
-}
-
-VHS::~VHS(){}
-
-void VHS::setAuteur(std::string Auteur){
+VHS::VHS(std::string Auteur, std::string MaisonProduction, float Duree)
+{
   this->Auteur = Auteur;
-}
-void VHS::setMaisonProduction(std::string MaisonProduction){
   this->MaisonProduction = MaisonProduction;
-}
-void VHS::setDuree(float Duree){
   this->Duree = Duree;
 }
 
-std::string VHS::getAuteur(){
+VHS::~VHS() {}
+
+void VHS::setAuteur(std::string Auteur)
+{
+  this->Auteur = Auteur;
+}
+void VHS::setMaisonProduction(std::string MaisonProduction)
+{
+  this->MaisonProduction = MaisonProduction;
+}
+void VHS::setDuree(float Duree)
+{
+  this->Duree = Duree;
+}
+
+std::string VHS::getAuteur()
+{
   return this->Auteur;
 }
-std::string VHS::getMaisonProduction(){
+std::string VHS::getMaisonProduction()
+{
   this->MaisonProduction = this->MaisonProduction;
 }
-std::string VHS::getDuree(){
+float VHS::getDuree()
+{
   return this->Duree;
+}
+
+void VHS::afficheInformation()
+{
+  std::cout << "L'auteur est " << this->Auteur << " la maison de production est " << this->MaisonProduction << " la durée est " << this->Duree << std::endl;
 }
