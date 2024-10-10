@@ -2,7 +2,7 @@
 CXX = g++
 
 # Options de compilation
-CXXFLAGS = -Wall -Wextra -I./Ressources -I./Livres -I./Revues -I./CD
+CXXFLAGS = -Wall -Wextra -I./Ressources -I./Livres -I./Revues -I./CD -I./VHS -I./DVD -I./RessourcesNumeriques
 
 # Nom de l'exécutable
 TARGET = mon_programme
@@ -12,6 +12,9 @@ SRCS = main.cpp \
        Livres/Livres.cpp \
        Revues/Revues.cpp \
        CD/CD.cpp \
+	   VHS/VHS.cpp \
+	   DVD/DVD.cpp \
+	   RessourcesNumeriques/RessourcesNumeriques.cpp \
        Ressources/Ressources.cpp
 
 # Fichiers objets (remplace les .cpp par .o)
