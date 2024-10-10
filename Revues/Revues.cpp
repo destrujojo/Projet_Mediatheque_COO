@@ -55,7 +55,7 @@ void Revues::afficheInformation()
 
 void Revues::afficheNomArticle()
 {
-  for (int i = 0; i < this->NomArticle.size(); i++)
+  for (long unsigned int i = 0; i < this->NomArticle.size(); i++)
   {
     std::cout << "Nom de l'article " << i + 1 << " : " << this->NomArticle[i] << std::endl;
   }
