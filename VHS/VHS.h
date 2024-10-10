@@ -11,6 +11,7 @@
 class VHS : public Ressources
 {
 public:
+    VHS();
     VHS(std::string Auteur, std::string MaisonProduction, float Duree);
     ~VHS();
 
