@@ -1,7 +1,3 @@
-//
-// Created by jonathan.roy on 26/09/2024.
-//
-
 #ifndef REVUES_H
 #define REVUES_H
 

@@ -1,5 +1,3 @@
-
-
 #include "DVD.h"
 #include <iostream>
 
