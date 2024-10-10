@@ -9,8 +9,8 @@ TARGET = mon_programme
 
 # Fichiers sources
 SRCS = main.cpp \
-       Livres/Livres.h \
-       Ressource/Ressources.h
+       Livres/Livres.cpp \
+       Ressources/Ressources.cpp
 
 # Fichiers objets (remplace les .h par .o)
 OBJS = $(SRCS:.h=.o)

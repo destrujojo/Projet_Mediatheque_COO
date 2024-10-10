@@ -8,8 +8,8 @@
 #include <iostream>
 
 class Ressources {
-  public:
-    virtual void afficheInformation() const = 0;
+  protected:
+    virtual void afficheInformation() = 0;
 };
 
 #endif //RESSOURCES_H

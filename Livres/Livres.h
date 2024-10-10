@@ -16,20 +16,21 @@ class Livres : public Ressources{
       void setCollection(std::string Collection);
       void setTitre(std::string Titre);
       void setResumer(std::string Resumer);
-      void setAnnuePublication(int AnnuePublication);
+      void setAnneePublication(int AnneePublication);
       void setNombrePages(int NombrePages);
       std::string getAuteur();
       std::string getCollection();
       std::string getTitre();
       std::string getResumer();
-      int getAnnuePublication();
+      int getAnneePublication();
       int getNombrePages();
+      void afficheInformation() override;
 
-    protected:
-      string Auteur;
-      string Collection;
-      string Titre;
-      string Resumer;
+  protected:
+      std::string Auteur;
+      std::string Collection;
+      std::string Titre;
+      std::string Resumer;
       int AnneePublication;
       int NombrePages;
 };
