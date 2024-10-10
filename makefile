@@ -10,6 +10,8 @@ TARGET = mon_programme
 # Fichiers sources
 SRCS = main.cpp \
        Livres/Livres.cpp \
+	   Revues/Revues.cpp \
+	   CD/CD.cpp \
        Ressources/Ressources.cpp
 
 # Fichiers objets (remplace les .h par .o)
