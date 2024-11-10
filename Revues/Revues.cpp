@@ -44,9 +44,9 @@ int Revues::getNbArticle()
   return this->NbArticle;
 }
 
-void Revues::afficheInformation()
+void Revues::afficheInformation() const
 {
-  std::cout << "L'auteur est " << this->Auteur << " la collection est " << this->Collection << " le titre est " << this->Titre << " le resumer est " << this->Resumer << "l'annee depublication est " << this->AnneePublication << " le nombre de pages est " << this->NombrePages << " l'éditeur est " << this->Editeur << "Le nombre d'article est de " << this->NbArticle << std::endl;
+  std::cout << "L'auteur est " << this->Auteur << " la collection est " << this->Collection << " le titre est " << this->Titre << " le resumer est " << this->Resumer << " l'annee depublication est " << this->AnneePublication << " le nombre de pages est " << this->NombrePages << " l'éditeur est " << this->Editeur << "Le nombre d'article est de " << this->NbArticle << std::endl;
 }
 
 void Revues::afficheNomArticle()

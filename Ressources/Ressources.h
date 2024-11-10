@@ -5,8 +5,9 @@
 
 class Ressources
 {
-protected:
-  virtual void afficheInformation() = 0;
+public:
+  virtual ~Ressources() {}
+  virtual void afficheInformation() const = 0;
 };
 
 #endif // RESSOURCES_H

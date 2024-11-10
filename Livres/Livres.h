@@ -22,7 +22,7 @@ public:
     std::string getResumer();
     int getAnneePublication();
     int getNombrePages();
-    void afficheInformation() override;
+    void afficheInformation() const override;
 
 protected:
     std::string Auteur;

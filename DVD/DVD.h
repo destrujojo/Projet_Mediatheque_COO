@@ -15,7 +15,7 @@ public:
 
     int getNbPistes();
 
-    void afficheInformation() override;
+    void afficheInformation() const override;
 
 private:
     int NbPistes;

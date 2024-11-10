@@ -21,7 +21,7 @@ public:
     std::string getNomAcces();
     int getTaille();
 
-    void afficheInformation() override;
+    void afficheInformation() const override;
 
 private:
     std::string Auteur;

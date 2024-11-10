@@ -47,7 +47,7 @@ int RessourcesNumeriques::getTaille()
     return this->Taille;
 }
 
-void RessourcesNumeriques::afficheInformation()
+void RessourcesNumeriques::afficheInformation() const
 {
     std::cout << "L'auteur est " << this->Auteur << " le type est " << this->Type << " le nom d'accès est " << this->NomAcces << " la taille est " << this->Taille << std::endl;
 }

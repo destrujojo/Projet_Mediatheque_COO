@@ -7,7 +7,7 @@
 class VHS : public Ressources
 {
 public:
-    VHS();
+    VHS() = default;
     VHS(std::string Auteur, std::string MaisonProduction, float Duree);
     ~VHS();
 
@@ -19,7 +19,7 @@ public:
     std::string getMaisonProduction();
     float getDuree();
 
-    void afficheInformation() override;
+    void afficheInformation() const override;
 
 protected:
     std::string Auteur;

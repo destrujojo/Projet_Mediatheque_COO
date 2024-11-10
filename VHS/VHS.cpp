@@ -29,14 +29,14 @@ std::string VHS::getAuteur()
 }
 std::string VHS::getMaisonProduction()
 {
-  this->MaisonProduction = this->MaisonProduction;
+  return this->MaisonProduction;
 }
 float VHS::getDuree()
 {
   return this->Duree;
 }
 
-void VHS::afficheInformation()
+void VHS::afficheInformation() const
 {
   std::cout << "L'auteur est " << this->Auteur << " la maison de production est " << this->MaisonProduction << " la durée est " << this->Duree << std::endl;
 }

@@ -22,7 +22,7 @@ public:
     float getDuree();
     int getNombrePistes();
 
-    void afficheInformation() override;
+    void afficheInformation() const override;
 
 private:
     std::string Auteur;

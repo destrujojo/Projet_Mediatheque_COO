@@ -74,7 +74,7 @@ int Livres::getNombrePages()
 }
 
 // fonction d'affichage de toute les données de la classe Livres
-void Livres::afficheInformation()
+void Livres::afficheInformation() const
 {
-  std::cout << "L'auteur est " << this->Auteur << " la collection est " << this->Collection << " le titre est " << this->Titre << " le resumer est " << this->Resumer << "l'annee depublication est " << this->AnneePublication << " le nombre de pages est " << this->NombrePages << std::endl;
+  std::cout << "L'auteur est " << this->Auteur << " la collection est " << this->Collection << " le titre est " << this->Titre << " le resumer est " << this->Resumer << " l'annee depublication est " << this->AnneePublication << " le nombre de pages est " << this->NombrePages << std::endl;
 }

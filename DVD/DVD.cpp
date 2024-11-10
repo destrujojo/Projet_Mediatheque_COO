@@ -23,7 +23,7 @@ int DVD::getNbPistes()
     return this->NbPistes;
 }
 
-void DVD::afficheInformation()
+void DVD::afficheInformation() const
 {
     std::cout << "L'auteur est " << this->Auteur << " la maison de production est " << this->MaisonProduction << " la durée est " << this->Duree << " le nombre de pistes est " << this->NbPistes << std::endl;
 }

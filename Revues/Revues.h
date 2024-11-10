@@ -19,7 +19,7 @@ public:
   std::vector<std::string> getNomArticle();
   int getNbArticle();
   void afficheNomArticle();
-  void afficheInformation() override;
+  void afficheInformation() const override;
 
 private:
   std::string Editeur;
