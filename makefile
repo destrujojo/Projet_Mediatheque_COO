@@ -2,7 +2,7 @@
 CXX = g++
 
 # Options de compilation
-CXXFLAGS = -Wall -Wextra -I./Ressources -I./Livres -I./Revues -I./CD -I./VHS -I./DVD -I./RessourcesNumeriques
+CXXFLAGS = -Wall -Wextra -I./include -I./Ressources -I./Livres -I./Revues -I./CD -I./VHS -I./DVD -I./RessourcesNumeriques
 
 # Nom de l'exécutable
 TARGET = mon_programme

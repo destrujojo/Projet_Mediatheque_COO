@@ -40,3 +40,13 @@ void VHS::afficheInformation() const
 {
   std::cout << "L'auteur est " << this->Auteur << " la maison de production est " << this->MaisonProduction << " la durée est " << this->Duree << std::endl;
 }
+
+json VHS::to_json() const
+{
+  json j;
+  j["Type"] = "VHS";
+  j["Auteur"] = this->Auteur;
+  j["MaisonProduction"] = this->MaisonProduction;
+  j["Duree"] = this->Duree;
+  return j;
+}

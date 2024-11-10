@@ -51,3 +51,14 @@ void RessourcesNumeriques::afficheInformation() const
 {
     std::cout << "L'auteur est " << this->Auteur << " le type est " << this->Type << " le nom d'accès est " << this->NomAcces << " la taille est " << this->Taille << std::endl;
 }
+
+json RessourcesNumeriques::to_json() const
+{
+    json j;
+    j["Type"] = "RessourcesNumeriques";
+    j["Auteur"] = this->Auteur;
+    j["Types"] = this->Type;
+    j["NomAcces"] = this->NomAcces;
+    j["Taille"] = this->Taille;
+    return j;
+}

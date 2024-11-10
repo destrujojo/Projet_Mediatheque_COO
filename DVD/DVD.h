@@ -17,6 +17,8 @@ public:
 
     void afficheInformation() const override;
 
+    json to_json() const override;
+
 private:
     int NbPistes;
 };

@@ -56,3 +56,19 @@ void Revues::afficheNomArticle()
     std::cout << "Nom de l'article " << i + 1 << " : " << this->NomArticle[i] << std::endl;
   }
 }
+
+json Revues::to_json() const
+{
+  json j;
+  j["Type"] = "Revues";
+  j["Auteur"] = this->Auteur;
+  j["Collection"] = this->Collection;
+  j["Titre"] = this->Titre;
+  j["Resumer"] = this->Resumer;
+  j["Editeur"] = this->Editeur;
+  j["NomArticle"] = this->NomArticle;
+  j["AnneePublication"] = this->AnneePublication;
+  j["NombrePages"] = this->NombrePages;
+  j["NbArticle"] = this->NbArticle;
+  return j;
+}

@@ -3,6 +3,8 @@
 
 #include "../Ressources/Ressources.h"
 #include <iostream>
+#include "../include/json.hpp"
+using json = nlohmann::json;
 
 class Livres : public Ressources
 {
@@ -23,6 +25,7 @@ public:
     int getAnneePublication();
     int getNombrePages();
     void afficheInformation() const override;
+    json to_json() const override;
 
 protected:
     std::string Auteur;

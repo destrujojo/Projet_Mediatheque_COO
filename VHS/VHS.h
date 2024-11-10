@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "../Ressources/Ressources.h"
+#include "../include/json.hpp"
+using json = nlohmann::json;
 
 class VHS : public Ressources
 {
@@ -20,6 +22,7 @@ public:
     float getDuree();
 
     void afficheInformation() const override;
+    json to_json() const override;
 
 protected:
     std::string Auteur;

@@ -20,6 +20,7 @@ public:
   int getNbArticle();
   void afficheNomArticle();
   void afficheInformation() const override;
+  json to_json() const override;
 
 private:
   std::string Editeur;

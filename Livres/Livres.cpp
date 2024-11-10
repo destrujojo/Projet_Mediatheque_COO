@@ -78,3 +78,17 @@ void Livres::afficheInformation() const
 {
   std::cout << "L'auteur est " << this->Auteur << " la collection est " << this->Collection << " le titre est " << this->Titre << " le resumer est " << this->Resumer << " l'annee depublication est " << this->AnneePublication << " le nombre de pages est " << this->NombrePages << std::endl;
 }
+
+// fonction de conversion de la classe Livres en json
+json Livres::to_json() const
+{
+  json j;
+  j["Type"] = "Livres";
+  j["Auteur"] = this->Auteur;
+  j["Collection"] = this->Collection;
+  j["Titre"] = this->Titre;
+  j["Resumer"] = this->Resumer;
+  j["AnneePublication"] = this->AnneePublication;
+  j["NombrePages"] = this->NombrePages;
+  return j;
+}

@@ -7,6 +7,102 @@
 #include "CD/CD.h"
 #include "DVD/DVD.h"
 #include "RessourcesNumeriques/RessourcesNumeriques.h"
+#include "json.hpp"
+#include <fstream>
+using json = nlohmann::json;
+
+void sauvegarderRessources(const std::vector<Ressources *> &ressources, const std::string &nomFichier)
+{
+    json jsonArray = json::array(); // Tableau JSON pour stocker chaque ressource
+
+    for (const Ressources *ressource : ressources)
+    {
+        jsonArray.push_back(ressource->to_json()); // Appel de la méthode to_json() pour chaque ressource
+    }
+
+    std::ofstream fichier(nomFichier); // Ouvrir le fichier pour écrire le JSON
+    fichier << jsonArray.dump(4);      // Sauvegarder avec indentation pour lecture aisée
+    fichier.close();
+}
+
+void chargerRessources(std::vector<Ressources *> &ressources, const std::string &nomFichier)
+{
+    std::ifstream fichier(nomFichier);
+    if (!fichier.is_open())
+    {
+        std::cerr << "Erreur: Impossible d'ouvrir le fichier " << nomFichier << std::endl;
+        return;
+    }
+
+    json jsonArray;
+    fichier >> jsonArray; // Lire le contenu du fichier JSON
+    fichier.close();
+
+    for (const auto &jsonRessource : jsonArray)
+    {
+        std::string type = jsonRessource.at("Type");
+
+        if (type == "Livres")
+        {
+            ressources.push_back(new Livres(
+                jsonRessource.at("Titre"),
+                jsonRessource.at("Auteur"),
+                jsonRessource.at("Resumer"),
+                jsonRessource.at("Collection"),
+                jsonRessource.at("AnneePublication"),
+                jsonRessource.at("NombrePages")));
+        }
+        else if (type == "Revues")
+        {
+            ressources.push_back(new Revues(
+                jsonRessource.at("Titre"),
+                jsonRessource.at("Auteur"),
+                jsonRessource.at("Resumer"),
+                jsonRessource.at("Collection"),
+                jsonRessource.at("Editeur"),
+                jsonRessource.at("Articles"),
+                jsonRessource.at("AnneePublication"),
+                jsonRessource.at("NombrePages"),
+                jsonRessource.at("NbArticles")));
+        }
+        else if (type == "VHS")
+        {
+            ressources.push_back(new VHS(
+                jsonRessource.at("Auteur"),
+                jsonRessource.at("MaisonProduction"),
+                jsonRessource.at("Duree")));
+        }
+        else if (type == "CD")
+        {
+            ressources.push_back(new CD(
+                jsonRessource.at("Auteur"),
+                jsonRessource.at("MaisonProduction"),
+                jsonRessource.at("Titre"),
+                jsonRessource.at("Duree"),
+                jsonRessource.at("NbPistes")));
+        }
+        else if (type == "DVD")
+        {
+            ressources.push_back(new DVD(
+                jsonRessource.at("Auteur"),
+                jsonRessource.at("MaisonProduction"),
+                jsonRessource.at("Duree"),
+                jsonRessource.at("NbPistes")));
+        }
+        else if (type == "RessourcesNumeriques")
+        {
+            ressources.push_back(new RessourcesNumeriques(
+                jsonRessource.at("Auteur"),
+                jsonRessource.at("Types"),
+                jsonRessource.at("NomAcces"),
+                jsonRessource.at("Taille")));
+        }
+        else
+        {
+            std::cerr << "Erreur: Type de ressource inconnu dans le fichier JSON" << std::endl;
+        }
+    }
+}
 
 int main()
 {
@@ -175,6 +271,18 @@ int main()
                 ressource->afficheInformation();
                 std::cout << "-----------------------------\n";
             }
+        }
+
+        if (input == "SAV")
+        {
+            sauvegarderRessources(ressources, "ressources.json");
+            std::cout << "Ressources sauvegardées dans ressources.json" << std::endl;
+        }
+
+        if (input == "CHARGE")
+        {
+            chargerRessources(ressources, "ressources.json");
+            std::cout << "Les ressources ont été chargées à partir de ressources.json" << std::endl;
         }
 
         if (input == "BYE")

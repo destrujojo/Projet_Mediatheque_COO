@@ -68,3 +68,15 @@ void CD::afficheInformation() const
 {
   std::cout << "L'auteur est " << this->Auteur << " la maison de production est " << this->MaisonProduction << " le titre est " << this->Titre << " la durée est " << this->Duree << " le nombre de pistes est " << this->NombrePistes << std::endl;
 }
+
+json CD::to_json() const
+{
+  json j;
+  j["Type"] = "CD";
+  j["Auteur"] = this->Auteur;
+  j["MaisonProduction"] = this->MaisonProduction;
+  j["Titre"] = this->Titre;
+  j["Duree"] = this->Duree;
+  j["NombrePistes"] = this->NombrePistes;
+  return j;
+}
