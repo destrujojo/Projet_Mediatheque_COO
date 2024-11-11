@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <algorithm>
 #include "Ressources/Ressources.h"
 #include "Livres/Livres.h"
 #include "Revues/Revues.h"
@@ -8,8 +10,63 @@
 #include "DVD/DVD.h"
 #include "RessourcesNumeriques/RessourcesNumeriques.h"
 #include "json.hpp"
-#include <fstream>
+
 using json = nlohmann::json;
+
+bool supprimerRessourceParPosition(size_t position, std::vector<Ressources *> &ressources)
+{
+    position -= 1;
+    if (position >= ressources.size())
+    {
+        std::cout << "Position invalide." << std::endl;
+        return false;
+    }
+
+    delete ressources[position];                     // Libère la mémoire de la ressource
+    ressources.erase(ressources.begin() + position); // Supprime la ressource du vecteur
+    std::cout << "Ressource supprimée avec succès." << std::endl;
+    return true;
+}
+
+void emprunterRessourceParPosition(size_t position, std::vector<Ressources *> &ressources, const std::string &nomEmprunteur)
+{
+    position -= 1;
+    if (position >= ressources.size())
+    {
+        std::cout << "Position invalide." << std::endl;
+        return;
+    }
+
+    if (ressources[position]->getEtat())
+    {
+        std::cout << "Ressource déjà empruntée par " << ressources[position]->getNomEmprunteur() << std::endl;
+        return;
+    }
+
+    if (ressources[position]->getNomEmprunteur() == "Reserv")
+    {
+        std::cout << "La resource est réserver" << std::endl;
+        return;
+    }
+
+    ressources[position]->setEtat(true);
+    ressources[position]->setNomEmprunteur(nomEmprunteur);
+    std::cout << "Ressource empruntée avec succès." << std::endl;
+}
+
+void deposerRessourceParPosition(size_t position, std::vector<Ressources *> &ressources)
+{
+    position -= 1;
+    if (position >= ressources.size())
+    {
+        std::cout << "Position invalide." << std::endl;
+        return;
+    }
+
+    ressources[position]->setEtat(false);
+    ressources[position]->setNomEmprunteur("");
+    std::cout << "Ressource déposée avec succès." << std::endl;
+}
 
 void sauvegarderRessources(const std::vector<Ressources *> &ressources, const std::string &nomFichier)
 {
@@ -45,32 +102,37 @@ void chargerRessources(std::vector<Ressources *> &ressources, const std::string 
         if (type == "Livres")
         {
             ressources.push_back(new Livres(
-                jsonRessource.at("Titre"),
                 jsonRessource.at("Auteur"),
-                jsonRessource.at("Resumer"),
                 jsonRessource.at("Collection"),
+                jsonRessource.at("Titre"),
+                jsonRessource.at("Resumer"),
                 jsonRessource.at("AnneePublication"),
-                jsonRessource.at("NombrePages")));
+                jsonRessource.at("NombrePages"),
+                jsonRessource.at("Etat"),
+                jsonRessource.at("NomEmprunteur")));
         }
         else if (type == "Revues")
         {
             ressources.push_back(new Revues(
-                jsonRessource.at("Titre"),
                 jsonRessource.at("Auteur"),
-                jsonRessource.at("Resumer"),
                 jsonRessource.at("Collection"),
+                jsonRessource.at("Titre"),
+                jsonRessource.at("Resumer"),
                 jsonRessource.at("Editeur"),
-                jsonRessource.at("Articles"),
                 jsonRessource.at("AnneePublication"),
                 jsonRessource.at("NombrePages"),
-                jsonRessource.at("NbArticles")));
+                jsonRessource.at("NbArticles"),
+                jsonRessource.at("Etat"),
+                jsonRessource.at("NomEmprunteur")));
         }
         else if (type == "VHS")
         {
             ressources.push_back(new VHS(
                 jsonRessource.at("Auteur"),
                 jsonRessource.at("MaisonProduction"),
-                jsonRessource.at("Duree")));
+                jsonRessource.at("Duree"),
+                jsonRessource.at("Etat"),
+                jsonRessource.at("NomEmprunteur")));
         }
         else if (type == "CD")
         {
@@ -79,7 +141,9 @@ void chargerRessources(std::vector<Ressources *> &ressources, const std::string 
                 jsonRessource.at("MaisonProduction"),
                 jsonRessource.at("Titre"),
                 jsonRessource.at("Duree"),
-                jsonRessource.at("NbPistes")));
+                jsonRessource.at("NbPistes"),
+                jsonRessource.at("Etat"),
+                jsonRessource.at("NomEmprunteur")));
         }
         else if (type == "DVD")
         {
@@ -87,7 +151,9 @@ void chargerRessources(std::vector<Ressources *> &ressources, const std::string 
                 jsonRessource.at("Auteur"),
                 jsonRessource.at("MaisonProduction"),
                 jsonRessource.at("Duree"),
-                jsonRessource.at("NbPistes")));
+                jsonRessource.at("NbPistes"),
+                jsonRessource.at("Etat"),
+                jsonRessource.at("NomEmprunteur")));
         }
         else if (type == "RessourcesNumeriques")
         {
@@ -95,7 +161,9 @@ void chargerRessources(std::vector<Ressources *> &ressources, const std::string 
                 jsonRessource.at("Auteur"),
                 jsonRessource.at("Types"),
                 jsonRessource.at("NomAcces"),
-                jsonRessource.at("Taille")));
+                jsonRessource.at("Taille"),
+                jsonRessource.at("Etat"),
+                jsonRessource.at("NomEmprunteur")));
         }
         else
         {
@@ -104,9 +172,81 @@ void chargerRessources(std::vector<Ressources *> &ressources, const std::string 
     }
 }
 
+std::vector<Ressources *> rechercherRessources(const std::vector<Ressources *> &ressources, const std::string &critere, const std::string &valeur)
+{
+    std::vector<Ressources *> resultats;
+
+    for (const auto &ressource : ressources)
+    {
+        bool correspondance = false;
+
+        // Comparaison selon le critère
+        if (critere == "Titre")
+        {
+            correspondance = ressource->getTitre().find(valeur) != std::string::npos;
+        }
+        else if (critere == "Auteur")
+        {
+            correspondance = ressource->getAuteur().find(valeur) != std::string::npos;
+        }
+        else if (critere == "Collection")
+        {
+            correspondance = ressource->getCollection().find(valeur) != std::string::npos;
+        }
+        else if (critere == "Editeur")
+        {
+            correspondance = ressource->getEditeur().find(valeur) != std::string::npos;
+        }
+        else if (critere == "MaisonProduction")
+        {
+            correspondance = ressource->getMaisonProduction().find(valeur) != std::string::npos;
+        }
+        else if (critere == "Type")
+        {
+            correspondance = ressource->getType().find(valeur) != std::string::npos;
+        }
+        else if (critere == "NomAcces")
+        {
+            correspondance = ressource->getNomAcces().find(valeur) != std::string::npos;
+        }
+        else if (critere == "AnneePublication")
+        {
+            correspondance = std::to_string(ressource->getAnneePublication()).find(valeur) != std::string::npos;
+        }
+        else if (critere == "NombrePages")
+        {
+            correspondance = std::to_string(ressource->getNombrePages()).find(valeur) != std::string::npos;
+        }
+        else if (critere == "NbArticles")
+        {
+            correspondance = std::to_string(ressource->getNbArticles()).find(valeur) != std::string::npos;
+        }
+        else if (critere == "Duree")
+        {
+            correspondance = std::to_string(ressource->getDuree()).find(valeur) != std::string::npos;
+        }
+        else if (critere == "NombrePistes")
+        {
+            correspondance = std::to_string(ressource->getNombrePistes()).find(valeur) != std::string::npos;
+        }
+        else if (critere == "Taille")
+        {
+            correspondance = std::to_string(ressource->getTaille()).find(valeur) != std::string::npos;
+        }
+
+        if (correspondance)
+        {
+            resultats.push_back(ressource);
+        }
+    }
+
+    return resultats;
+}
+
 int main()
 {
     std::vector<Ressources *> ressources;
+    std::vector<Ressources *> resultatsActuels;
 
     while (1)
     {
@@ -118,8 +258,8 @@ int main()
             << "SAV - Sauvegarde les Médias" << std::endl
             << "CHARGE - Charge les Médias" << std::endl
             << "SEARCH - Recherche Média" << std::endl
-            << "RESERV - Réserver Média" << std::endl
-            << "EMPRUNT - Emprunter un Média" << std::endl
+            << "RES - Réserver Média" << std::endl
+            << "EMP - Emprunter un Média" << std::endl
             << "DEPO - Rendre Média" << std::endl
             << "BYE - Quitter" << std::endl;
         std::string input;
@@ -152,7 +292,7 @@ int main()
                 std::cout << "Entrer le Nombre de Pages: ";
                 std::cin >> NbPages;
 
-                ressources.push_back(new Livres(Titre, Auteur, Resumer, Collection, Annee, NbPages));
+                ressources.push_back(new Livres(Auteur, Collection, Titre, Resumer, Annee, NbPages, false, ""));
             }
             else if (type == "Revues")
             {
@@ -161,7 +301,6 @@ int main()
                 std::string Resumer;
                 std::string Collection;
                 std::string Editeur;
-                std::vector<std::string> Articles;
                 int Annee;
                 int NbPages;
                 int NbArticles;
@@ -183,7 +322,7 @@ int main()
                 std::cout << "Entrer le Nombre d'Articles: ";
                 std::cin >> NbArticles;
 
-                ressources.push_back(new Revues(Titre, Auteur, Resumer, Collection, Editeur, Articles, Annee, NbPages, NbArticles));
+                ressources.push_back(new Revues(Auteur, Collection, Titre, Resumer, Editeur, Annee, NbPages, NbArticles, false, ""));
             }
             else if (type == "VHS")
             {
@@ -198,7 +337,7 @@ int main()
                 std::cout << "Entrer la Duree: ";
                 std::cin >> Duree;
 
-                ressources.push_back(new VHS(Auteur, MaisonProduction, Duree));
+                ressources.push_back(new VHS(Auteur, MaisonProduction, Duree, false, ""));
             }
             else if (type == "CD")
             {
@@ -219,7 +358,7 @@ int main()
                 std::cout << "Entrer le Nombre de Pistes: ";
                 std::cin >> NombrePistes;
 
-                ressources.push_back(new CD(Auteur, MaisonProduction, Titre, Duree, NombrePistes));
+                ressources.push_back(new CD(Auteur, MaisonProduction, Titre, Duree, NombrePistes, false, ""));
             }
             else if (type == "DVD")
             {
@@ -237,7 +376,7 @@ int main()
                 std::cout << "Entrer le Nombre de Pistes: ";
                 std::cin >> NbPistes;
 
-                ressources.push_back(new DVD(Auteur, MaisonProduction, Duree, NbPistes));
+                ressources.push_back(new DVD(Auteur, MaisonProduction, Duree, NbPistes, false, ""));
             }
             else if (type == "RessourcesNumeriques")
             {
@@ -255,12 +394,41 @@ int main()
                 std::cout << "Entrer la Taille: ";
                 std::cin >> Taille;
 
-                ressources.push_back(new RessourcesNumeriques(Auteur, type, NomAcces, Taille));
+                ressources.push_back(new RessourcesNumeriques(Auteur, type, NomAcces, Taille, false, ""));
             }
             else
             {
                 std::cout << "Type de ressource inconnu" << std::endl;
             }
+        }
+
+        if (input.substr(0, 3) == "SUP")
+        {
+            size_t position = std::stoi(input.substr(4));
+            supprimerRessourceParPosition(position, ressources);
+        }
+
+        if (input.substr(0, 3) == "EMP")
+        {
+            size_t position = std::stoi(input.substr(4));
+            std::cout << position << std::endl;
+            std::string nomEmprunteur;
+            std::cout << "Entrez le nom de l'emprunteur : ";
+            std::getline(std::cin, nomEmprunteur);
+            emprunterRessourceParPosition(position, ressources, nomEmprunteur);
+        }
+
+        if (input.substr(0, 3) == "RES")
+        {
+            size_t position = std::stoi(input.substr(4));
+            std::string nomEmprunteur = "Reserv";
+            emprunterRessourceParPosition(position, ressources, nomEmprunteur);
+        }
+
+        if (input.substr(0, 4) == "DEPO")
+        {
+            size_t position = std::stoi(input.substr(5));
+            deposerRessourceParPosition(position, ressources);
         }
 
         if (input == "LIST")
@@ -283,6 +451,28 @@ int main()
         {
             chargerRessources(ressources, "ressources.json");
             std::cout << "Les ressources ont été chargées à partir de ressources.json" << std::endl;
+        }
+
+        if (input == "SEARCH")
+        {
+            std::cout << "Entrez le critère de recherche (Titre, Auteur, etc.): ";
+            std::string critere;
+            std::getline(std::cin, critere);
+
+            std::cout << "Entrez la valeur à rechercher : ";
+            std::string valeur;
+            std::getline(std::cin, valeur);
+
+            // Effectuer la recherche sur les résultats actuels pour permettre la recherche incrémentale
+            resultatsActuels = rechercherRessources(resultatsActuels, critere, valeur);
+
+            // Affichage des résultats de recherche
+            std::cout << "Résultats de la recherche : " << std::endl;
+            for (const auto &ressource : resultatsActuels)
+            {
+                std::cout << ressource->getTitre() << std::endl;
+                ressource->afficheInformation();
+            }
         }
 
         if (input == "BYE")

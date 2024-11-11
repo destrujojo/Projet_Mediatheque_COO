@@ -1,11 +1,22 @@
 [
     {
-        "AnneePublication": 2111,
-        "Auteur": "rtg",
-        "Collection": "erf",
-        "NombrePages": 435,
-        "Resumer": "erg",
-        "Titre": "erg",
+        "AnneePublication": 2024,
+        "Auteur": "Frederic",
+        "Collection": "JUNIA",
+        "Etat": false,
+        "NomEmprunteur": "",
+        "NombrePages": 666,
+        "Resumer": "L'histoire d'un idiot",
+        "Titre": "Jonathan l'idiot",
         "Type": "Livres"
+    },
+    {
+        "Auteur": "Marvel",
+        "Duree": 120.0,
+        "Etat": false,
+        "MaisonProduction": "Marvel",
+        "NbPistes": 4,
+        "NomEmprunteur": "",
+        "Type": "DVD"
     }
 ]
