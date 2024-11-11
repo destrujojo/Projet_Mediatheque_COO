@@ -256,13 +256,14 @@ int main()
             << "SUP - SUPPRIMER Média" << std::endl
             << "LIST - Lister les Médias" << std::endl
             << "SAV - Sauvegarde les Médias" << std::endl
-            << "CHARGE - Charge les Médias" << std::endl
             << "SEARCH - Recherche Média" << std::endl
             << "RES - Réserver Média" << std::endl
             << "EMP - Emprunter un Média" << std::endl
             << "DEPO - Rendre Média" << std::endl
+            << "CHARGE - Charge les Médias" << std::endl
             << "BYE - Quitter" << std::endl;
         std::string input;
+        std::cout << "Entrer une commande: ";
         std::getline(std::cin, input);
 
         if (input.substr(0, 3) == "ADD")
