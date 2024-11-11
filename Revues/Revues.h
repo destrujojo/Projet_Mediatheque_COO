@@ -1,7 +1,3 @@
-//
-// Created by jonathan.roy on 26/09/2024.
-//
-
 #ifndef REVUES_H
 #define REVUES_H
 
@@ -14,20 +10,24 @@ class Revues : public Livres
 {
 public:
   Revues();
-  Revues(std::string Auteur, std::string Collection, std::string Titre, std::string Resumer, std::string Editeur, std::vector<std::string> NomArticle, int AnneePublication, int NombrePages, int NbArticle);
+  Revues(std::string Auteur, std::string Collection, std::string Titre, std::string Resumer, std::string Editeur, int AnneePublication, int NombrePages, int NbArticle, bool Etat, std::string NomEmprunteur);
   ~Revues();
   void setEditeur(std::string Editeur);
-  void setNomArticle(std::vector<std::string> NomArticle);
-  void setNbArticle(int NbArticle);
-  std::string getEditeur();
-  std::vector<std::string> getNomArticle();
-  int getNbArticle();
-  void afficheNomArticle();
-  void afficheInformation() override;
+  void setNbArticles(int NbArticle);
+  void setEtat(bool etat) override;
+  void setNomEmprunteur(std::string NomEmprunteur) override;
+
+  std::string getEditeur() const override;
+  std::string getType() const override;
+  int getNbArticles() const override;
+  bool getEtat() const override;
+  std::string getNomEmprunteur() const override;
+
+  void afficheInformation() const override;
+  json to_json() const override;
 
 private:
   std::string Editeur;
-  std::vector<std::string> NomArticle;
   int NbArticle;
 };
 

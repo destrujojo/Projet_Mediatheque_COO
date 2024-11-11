@@ -1,22 +1,23 @@
-#ifndef VHS_H
-#define VHS_H
+#ifndef RESSOURCESNUMERIQUES_H
+#define RESSOURCESNUMERIQUES_H
 
-#include <iostream>
 #include "../Ressources/Ressources.h"
+#include <iostream>
 #include "../include/json.hpp"
 using json = nlohmann::json;
 
-class VHS : public Ressources
+class RessourcesNumeriques : public Ressources
 {
 public:
-    VHS() = default;
-    VHS(std::string Auteur, std::string MaisonProduction, float Duree, bool Etat, std::string NomEmprunteur);
-    ~VHS();
+    RessourcesNumeriques();
+    RessourcesNumeriques(std::string Auteur, std::string Type, std::string NomAcces, int Taille, bool Etat, std::string NomEmprunteur);
+    ~RessourcesNumeriques();
 
     void setAuteur(std::string Auteur);
-    void setMaisonProduction(std::string MaisonProduction);
-    void setDuree(float Duree);
-    void setEtat(bool Etat) override;
+    void setType(std::string Type);
+    void setNomAcces(std::string NomAcces);
+    void setTaille(int Taille);
+    void setEtat(bool etat) override;
     void setNomEmprunteur(std::string NomEmprunteur) override;
 
     std::string getAuteur() const override;
@@ -41,12 +42,13 @@ public:
     void afficheInformation() const override;
     json to_json() const override;
 
-protected:
+private:
     std::string Auteur;
-    std::string MaisonProduction;
-    float Duree;
+    std::string Type;
+    std::string NomAcces;
+    int Taille;
     bool Etat;
     std::string NomEmprunteur;
 };
 
-#endif // VHS_H
+#endif // RESSOURCESNUMERIQUES_H
